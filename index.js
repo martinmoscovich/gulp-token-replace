@@ -50,12 +50,13 @@ function replace(text, options) {
     var fullMatch = regExpResult[0];
     var tokenName = regExpResult[1];
     var tokenValue = getTokenValue(options.tokens, tokenName);
-    if (tokenValue === null && options.failOnUnknown) {
-      throw new Error("Token not found: " + tokenName);
+
+    if (tokenValue === null) {
+      if(options.failOnUnknown) throw new Error('Token not found: ' + tokenName);
+
+      if(!options.preserveUnknownTokens) tokenValue = '';
     }
-    if (tokenValue === null && !options.preserveUnknownTokens) {
-      tokenValue = '';
-    } 
+
     if (tokenValue !== null) {
       retVal = retVal.replace(fullMatch, tokenValue);
     }
