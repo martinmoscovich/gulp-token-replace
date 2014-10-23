@@ -35,6 +35,7 @@ function injectDefaultOptions(options) {
   options.suffix = options.suffix || '}}';
   options.tokens = options.tokens || options.global || {};
   options.preserveUnknownTokens = options.preserveUnknownTokens || false;
+  options.failOnUnknown = options.failOnUnknown || true;
   return options;
 }
 
@@ -49,9 +50,12 @@ function replace(text, options) {
     var fullMatch = regExpResult[0];
     var tokenName = regExpResult[1];
     var tokenValue = getTokenValue(options.tokens, tokenName);
+    if (tokenValue === null && options.failOnUnknown) {
+      throw new Error("Token not found: " + tokenName);
+    }
     if (tokenValue === null && !options.preserveUnknownTokens) {
       tokenValue = '';
-    }
+    } 
     if (tokenValue !== null) {
       retVal = retVal.replace(fullMatch, tokenValue);
     }
