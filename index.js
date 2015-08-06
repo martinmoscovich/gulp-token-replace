@@ -4,7 +4,8 @@ var concat = require('concat-stream');
 var es = require('event-stream');
 var PluginError = require('gulp-util').PluginError;
 
-module.exports = function(options) {
+
+var exp = function(options) {
   options = injectDefaultOptions(options);
 
   return es.through(function(file) {
@@ -28,6 +29,8 @@ module.exports = function(options) {
     }
   });
 };
+
+
 
 function injectDefaultOptions(options) {
   options = options || {};
@@ -81,3 +84,6 @@ function getTokenValue(tokens, tokenName) {
   }
   return tmpTokens;
 }
+
+exp.replace = replace;
+module.exports = exp;
